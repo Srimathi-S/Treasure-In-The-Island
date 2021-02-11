@@ -5,12 +5,14 @@ var totalTreasureCoins;
 var treasureCoinsDiv;
 var islandDiv;
 var cluesDiv;
+var gameRulesDiv;
 var treasureRow;
 var treasureColumn;
 
 var isGameStarted=false;
 var isGameOver=false;
 
+const gameRules="Below is where you have to choose the island cells to find treasure.Coins will be minimized for wrong guess.Look at left to know coins left and clues for your way to treasure"
 const treasureCoinsTabText="Treasure Coins : ";
 const defaultClue="Your clues appear here";
 const firstElement=0;
@@ -46,6 +48,8 @@ function startGame()
     gameDiv.appendChild(treasureCoinsDiv);
     generateCluesTab();
     gameDiv.appendChild(cluesDiv);
+    generateGameRules();
+    gameDiv.appendChild(gameRulesDiv);
     generateIslandTab();
     gameDiv.appendChild(islandDiv);
     document.body.appendChild(gameDiv);
@@ -73,6 +77,13 @@ function generateIslandTab()
     }
     islandDiv.className="island";
     
+}
+
+function  generateGameRules()
+{
+    gameRulesDiv=document.createElement("div");
+    gameRulesDiv.className="game-rules";
+    gameRulesDiv.innerHTML=gameRules;
 }
 
 function generateIslandCellClassName(color)
@@ -105,7 +116,7 @@ function generateTreasureCoins()
 {
     currentTreasureCoins=totalRows*10;
     totalTreasureCoins=totalRows*10;
-    treasureRow=Math.floor((Math.random() * totalRows));
+    treasureRow=Math.floor(Math.random() * totalRows);
     treasureColumn=Math.floor(Math.random()*totalColumns);
     console.log(treasureRow+" "+treasureColumn);
 }
@@ -140,14 +151,14 @@ function checkForTreasureAndGiveClue(islandCell)
         modifyTreasureTab();
     }
     else{
-        treasureFound(selectedRow,selectedColumn);
+        treasureFound();
     }
     
 }
 
 function isTreasureNotFound(selectedRow,selectedColumn)
 {
- return (treasureRow!=selectedRow || treasureColumn!=selectedColumn)
+ return (treasureRow!=selectedRow || treasureColumn!=selectedColumn);
 }
 
 function modifyClueTab(selectedRow,selectedColumn)
@@ -206,7 +217,7 @@ function hasSafeAmountOfCoins()
     return (currentTreasureCoins> (totalTreasureCoins/2));
 }
 
-function treasureFound(selectedRow,selectedColumn)
+function treasureFound()
 {
     displayTreasureCell();
     wonDiv=document.createElement("div");
@@ -239,7 +250,7 @@ function hasEnoughCoins()
 
 function terminateGame()
 {
-   displayTreasureCell();
+    displayTreasureCell();
     lostDiv=document.createElement("div");
     lostDiv.className="lost-game";
     lostDiv.innerHTML=lostGame;
