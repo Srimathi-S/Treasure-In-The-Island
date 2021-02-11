@@ -27,6 +27,7 @@ button{
     height: 50px;
     font-size: x-large;
 }
+
 .game
 {
    display: flex; 
@@ -104,29 +105,51 @@ button{
     background-color:white;
     color: red;
 }
-@keyframes win
+
+@keyframes game-over
 {
-    0%   {top: 1000px;}
+    from {top: 1000px;}
     25%  {top: 600px;}
     50%  {top: 500px;}
     75%  {top: 100px;}
-    100% {top: 0px;}
+    to {top: 50px;}
   
 }
 
-.game-over
+.won-game
 {
-    width: 200px;
-    height: 100px;
+    width: 250px;
+    height: 200px;
+    padding-top: 30px;
     background:blueviolet;
     margin-left: 700px;
     position: absolute;
-    animation-name: win;
-    animation-duration: 4s;
-    animation-iteration-count: infinite;
-    color: white;
+    animation-name: game-over;
+    animation-duration:5s;
+    animation-iteration-count: 1;
+    color:white;
     display: flex;
     justify-content: center;
-    align-items: center;
+    font-size: larger;
     font-weight: 600;
+    background-image:url("./assets/won.png") ;
+}
+
+.lost-game
+{
+    width: 250px;
+    height: 300px;
+    padding-top: 5px;
+    margin-left: 700px;
+    position: absolute;
+    animation-name: game-over;
+    animation-duration: 4s;
+    animation-iteration-count: 1;
+    color:black;
+    display: flex;
+    justify-content: center;
+    font-size: larger;
+    font-weight: 600;
+    background-image:url("./assets/lost-image.jpg") ;
+    background-repeat: no-repeat;
 }

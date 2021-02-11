@@ -18,7 +18,6 @@ const lookDownwards="Please Look Downwards";
 const lookUpwards="Please Look Upwards";
 const lookLeftwards="Please Look Leftwards";
 const lookRightwards="Please Look Rightwards";
-const treasureFound="Treasure found";
 
 function createGame()
 {
@@ -131,13 +130,13 @@ function checkForTreasureAndGiveClue(islandCell)
    
     if(isTreasureNotFound(selectedRow,selectedColumn))
     {
-        modifyClueTab(selectedRow,selectedColumn);
         minimizeTreasureCoins();
+        modifyClueTab(selectedRow,selectedColumn);
         makeSelectedCellNone(selectedRow,selectedColumn);
         modifyTreasureTab();
     }
     else{
-        treasureFoundTab();
+        treasureFound();
     }
     
 }
@@ -149,30 +148,29 @@ function isTreasureNotFound(selectedRow,selectedColumn)
 
 function modifyClueTab(selectedRow,selectedColumn)
 {
-    clue=document.getElementsByClassName("clues")[firstElement];
+    clueTab=document.getElementsByClassName("clues")[firstElement];
     if(selectedRow<treasureRow)
     {
-        clue.innerHTML=lookDownwards;
+        clueTab.innerHTML=lookDownwards;
     }
     else if(selectedRow>treasureRow)
     {
-        clue.innerHTML=lookUpwards;
+        clueTab.innerHTML=lookUpwards;
     }
     else
     {
         if(selectedColumn<treasureColumn)
         {
-            clue.innerHTML=lookRightwards;
+            clueTab.innerHTML=lookRightwards;
         }
         else if(selectedColumn>treasureColumn)
         {
-            clue.innerHTML=lookLeftwards;
+            clueTab.innerHTML=lookLeftwards;
         }
-        else
-        {
-            clue.innerHTML=treasureFound;
-            return;
-        } 
+    }
+    if(!hasSafeAmountOfCoins())
+    {
+        clueTab.setAttribute("style","background-color:red");
     }
 }
 
@@ -205,13 +203,14 @@ function hasSafeAmountOfCoins()
     return (currentTreasureCoins> (totalTreasureCoins/2));
 }
 
-function treasureFoundTab()
+function treasureFound()
 {
-    isGameOver=true;
+    
     wonDiv=document.createElement("div");
-    wonDiv.className="game-over";
+    wonDiv.className="won-game";
     wonDiv.innerHTML="You won";
     document.body.append(wonDiv);
+    isGameOver=true;
 }
 
 function canContinueGame()
@@ -230,10 +229,11 @@ function hasEnoughCoins()
 
 function terminateGame()
 {
-    isGameOver=true;
+   
     lostDiv=document.createElement("div");
-    lostDiv.className="game-over";
+    lostDiv.className="lost-game";
     lostDiv.innerHTML="You lost";
     console.log("lost");
     document.body.append(lostDiv);
+    isGameOver=true;
 }
