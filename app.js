@@ -62,7 +62,7 @@ function generateIslandTab()
         for(let column=0;column<totalColumns;column++)
         {
             let islandCellDiv=document.createElement("div");
-            islandCellDiv.className=generateClassName(color);
+            islandCellDiv.className=generateIslandCellClassName(color);
             islandCellDiv.id=generateId(row,column);
             islandCellDiv.setAttribute("onclick","playGame(this)");
             color=changeIslandCellColor(color);
@@ -75,7 +75,7 @@ function generateIslandTab()
     
 }
 
-function generateClassName(color)
+function generateIslandCellClassName(color)
 {
     if(color=="blue")return "island-cell-blue";
     return "island-cell-brown";
@@ -226,7 +226,6 @@ function displayTreasureCell()
 
 function canContinueGame()
 {
-    console.log("Coming here");
     if(!hasEnoughCoins())
     {
         terminateGame();
