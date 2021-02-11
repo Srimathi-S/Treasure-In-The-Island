@@ -104,3 +104,29 @@ button{
     background-color:white;
     color: red;
 }
+@keyframes win
+{
+    0%   {top: 1000px;}
+    25%  {top: 600px;}
+    50%  {top: 500px;}
+    75%  {top: 100px;}
+    100% {top: 0px;}
+  
+}
+
+.game-over
+{
+    width: 200px;
+    height: 100px;
+    background:blueviolet;
+    margin-left: 700px;
+    position: absolute;
+    animation-name: win;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+}

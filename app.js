@@ -7,6 +7,8 @@ var islandDiv;
 var cluesDiv;
 var treasureRow;
 var treasureColumn;
+var isGameStarted=false;
+var isGameOver=false;
 
 const treasureCoinsTabText="Treasure Coins : ";
 const defaultClue="Your clues appear here";
@@ -17,6 +19,17 @@ const lookUpwards="Please Look Upwards";
 const lookLeftwards="Please Look Leftwards";
 const lookRightwards="Please Look Rightwards";
 const treasureFound="Treasure found";
+
+function createGame()
+{
+    if(!isGameStarted)startGame();
+    else gameAlreadyRunning();
+}
+
+function gameAlreadyRunning()
+{
+    alert("Please play the current game");
+}
 
 function startGame()
 {
@@ -33,6 +46,7 @@ function startGame()
     generateIslandTab();
     gameDiv.appendChild(islandDiv);
     document.body.appendChild(gameDiv);
+    isGameStarted=true;
 }
 
 function generateIslandTab()
@@ -47,7 +61,7 @@ function generateIslandTab()
             let islandCellDiv=document.createElement("div");
             islandCellDiv.className=generateClassName(color);
             islandCellDiv.id=generateId(row,column);
-            islandCellDiv.setAttribute("onclick","checkForTreasureAndGiveClue(this)");
+            islandCellDiv.setAttribute("onclick","playGame(this)");
             color=changeIslandCellColor(color);
             rowDiv.appendChild(islandCellDiv);
         }
@@ -98,19 +112,34 @@ function generateId(row,column)
     return "cell-"+row+"-"+column;
 }
 
+function playGame(islandCell)
+{
+    if(!isGameOver)
+    {
+        checkForTreasureAndGiveClue(islandCell);
+        canContinueGame();
+    }
+
+}
+
 function checkForTreasureAndGiveClue(islandCell)
 {
     islandCellId=islandCell.id;
     let splitter=islandCellId.split('-');
     let selectedRow=splitter[1];
     let selectedColumn=splitter[2];
-    modifyClueTab(selectedRow,selectedColumn);
+   
     if(isTreasureNotFound(selectedRow,selectedColumn))
     {
-    minimizeTreasureCoins();
-    makeSelectedCellNone(selectedRow,selectedColumn);
+        modifyClueTab(selectedRow,selectedColumn);
+        minimizeTreasureCoins();
+        makeSelectedCellNone(selectedRow,selectedColumn);
+        modifyTreasureTab();
     }
-    modifyTreasureTab();
+    else{
+        treasureFoundTab();
+    }
+    
 }
 
 function isTreasureNotFound(selectedRow,selectedColumn)
@@ -164,5 +193,47 @@ function makeSelectedCellNone(selectedRow,selectedColumn)
 function modifyTreasureTab()
 {
     treasureTab=document.getElementsByClassName("treasure-coins")[firstElement];
+    if(!hasSafeAmountOfCoins())
+    {
+        treasureTab.setAttribute("style","background-color:red");
+    }
     treasureTab.innerHTML=treasureCoinsTabText+currentTreasureCoins;
+}
+
+function hasSafeAmountOfCoins()
+{
+    return (currentTreasureCoins> (totalTreasureCoins/2));
+}
+
+function treasureFoundTab()
+{
+    isGameOver=true;
+    wonDiv=document.createElement("div");
+    wonDiv.className="game-over";
+    wonDiv.innerHTML="You won";
+    document.body.append(wonDiv);
+}
+
+function canContinueGame()
+{
+    console.log("Coming here");
+    if(!hasEnoughCoins())
+    {
+        terminateGame();
+    }
+}
+
+function hasEnoughCoins()
+{
+    return currentTreasureCoins!=0;
+}
+
+function terminateGame()
+{
+    isGameOver=true;
+    lostDiv=document.createElement("div");
+    lostDiv.className="game-over";
+    lostDiv.innerHTML="You lost";
+    console.log("lost");
+    document.body.append(lostDiv);
 }
