@@ -1,0 +1,106 @@
+body
+{
+    background-color:bisque;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-weight: 500;
+    font-style: italic;
+}
+#input
+{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+input{
+    margin-top: 100px;
+    height:50px;
+    width:400px;
+}
+button{
+    border: 2px solid blueviolet;
+    border-radius: 4px;
+    background-color:blueviolet;
+    color: white;
+    margin-top: 100px;
+    width: 200px;
+    height: 50px;
+    font-size: x-large;
+}
+.game
+{
+   display: flex; 
+   flex-direction:column;
+}
+.island-cell-blue
+{
+    border:2px solid black;
+    color:rgb(226, 209, 209);
+    border-radius: 5px;
+    width:80px;
+    height:20px;
+    background-color: blue;
+}
+.island-cell-brown
+{
+    border:2px solid black;
+    color:rgb(226, 209, 209);
+    border-radius: 5px;
+    width:80px;
+    height:20px;
+    background-color: brown;
+}
+.island-row
+{
+    display:flex;
+    flex-direction: row;
+}
+.island
+{
+    display:flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+    padding:100px;
+
+}
+.treasure-coins
+{
+    display:flex;
+    align-items:center;
+    justify-content: center;
+    border: 1px solid green; 
+    height: 50px;
+    width:  200px;
+    background-color: green;
+    margin-left: 1200px;
+    margin-top: 50px;
+    color: white;
+    border-radius: 10px;
+}
+.clues
+{
+    display:flex;
+    align-items:center;
+    justify-content: center;
+    border: 1px solid green; 
+    height: 50px;
+    font-weight: 600;
+    width:  400px;
+    margin-top: 50px;
+    margin-left: 1100px;
+    background-color:green;
+    color: white;
+    border-radius: 10px;
+}
+#null-cell
+{
+    align-items: center;
+    border:2px solid black;
+    color:rgb(226, 209, 209);
+    border-radius: 5px;
+    width:80px;
+    height:20px;
+    background-color:white;
+    color: red;
+}
