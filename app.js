@@ -7,6 +7,7 @@ var islandDiv;
 var cluesDiv;
 var treasureRow;
 var treasureColumn;
+
 var isGameStarted=false;
 var isGameOver=false;
 
@@ -18,6 +19,9 @@ const lookDownwards="Please Look Downwards";
 const lookUpwards="Please Look Upwards";
 const lookLeftwards="Please Look Leftwards";
 const lookRightwards="Please Look Rightwards";
+const lostGame="You lost";
+const wonGame="You won";
+
 
 function createGame()
 {
@@ -136,7 +140,7 @@ function checkForTreasureAndGiveClue(islandCell)
         modifyTreasureTab();
     }
     else{
-        treasureFound();
+        treasureFound(selectedRow,selectedColumn);
     }
     
 }
@@ -170,7 +174,7 @@ function modifyClueTab(selectedRow,selectedColumn)
     }
     if(!hasSafeAmountOfCoins())
     {
-        clueTab.setAttribute("style","background-color:red");
+        clueTab.setAttribute("style","background-color:red;border: 2px solid red;");
     }
 }
 
@@ -185,7 +189,6 @@ function makeSelectedCellNone(selectedRow,selectedColumn)
 {
     currentCell=document.getElementById(generateId(selectedRow,selectedColumn));
     currentCell.id="null-cell";
-    currentCell.innerHTML="None";
 }
 
 function modifyTreasureTab()
@@ -193,7 +196,7 @@ function modifyTreasureTab()
     treasureTab=document.getElementsByClassName("treasure-coins")[firstElement];
     if(!hasSafeAmountOfCoins())
     {
-        treasureTab.setAttribute("style","background-color:red");
+        treasureTab.setAttribute("style","background-color:red;border: 2px solid red;");
     }
     treasureTab.innerHTML=treasureCoinsTabText+currentTreasureCoins;
 }
@@ -203,14 +206,22 @@ function hasSafeAmountOfCoins()
     return (currentTreasureCoins> (totalTreasureCoins/2));
 }
 
-function treasureFound()
+function treasureFound(selectedRow,selectedColumn)
 {
-    
+    displayTreasureCell();
     wonDiv=document.createElement("div");
     wonDiv.className="won-game";
-    wonDiv.innerHTML="You won";
+    wonDiv.innerHTML=wonGame;
     document.body.append(wonDiv);
     isGameOver=true;
+}
+
+function displayTreasureCell()
+{
+    treasureCellId=generateId(treasureRow,treasureColumn);
+    treasureCell=document.getElementById(treasureCellId);
+    treasureCell.className="treasure-cell";
+    treasureCell.innerHTML=currentTreasureCoins;
 }
 
 function canContinueGame()
@@ -229,10 +240,10 @@ function hasEnoughCoins()
 
 function terminateGame()
 {
-   
+   displayTreasureCell();
     lostDiv=document.createElement("div");
     lostDiv.className="lost-game";
-    lostDiv.innerHTML="You lost";
+    lostDiv.innerHTML=lostGame;
     console.log("lost");
     document.body.append(lostDiv);
     isGameOver=true;

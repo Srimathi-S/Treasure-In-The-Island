@@ -1,6 +1,6 @@
 body
 {
-    background-color:bisque;
+    background-color:lightcyan;
     font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     font-weight: 500;
     font-style: italic;
@@ -25,7 +25,8 @@ button{
     margin-top: 100px;
     width: 200px;
     height: 50px;
-    font-size: x-large;
+    font-size: larger;
+    
 }
 
 .game
@@ -78,6 +79,7 @@ button{
     margin-top: 50px;
     color: white;
     border-radius: 10px;
+    font-weight: 600;
 }
 .clues
 {
@@ -97,7 +99,8 @@ button{
 #null-cell
 {
     align-items: center;
-    border:2px solid black;
+    justify-content: center;
+    border:2px solid white;
     color:rgb(226, 209, 209);
     border-radius: 5px;
     width:80px;
@@ -108,11 +111,11 @@ button{
 
 @keyframes game-over
 {
-    from {top: 1000px;}
-    25%  {top: 600px;}
+    from {top: 0px;}
+    25%  {top: 200px;}
     50%  {top: 500px;}
-    75%  {top: 100px;}
-    to {top: 50px;}
+    75%  {top: 600px;}
+    to   {top: 500px;}
   
 }
 
@@ -123,33 +126,50 @@ button{
     padding-top: 30px;
     background:blueviolet;
     margin-left: 700px;
-    position: absolute;
     animation-name: game-over;
-    animation-duration:5s;
+    animation-duration:10s;
     animation-iteration-count: 1;
+    animation-fill-mode: forwards;
     color:white;
     display: flex;
     justify-content: center;
     font-size: larger;
     font-weight: 600;
     background-image:url("./assets/won.png") ;
+    position: absolute;
 }
 
 .lost-game
 {
     width: 250px;
     height: 300px;
-    padding-top: 5px;
+    padding-top: 0px;
     margin-left: 700px;
     position: absolute;
     animation-name: game-over;
     animation-duration: 4s;
     animation-iteration-count: 1;
+    animation-fill-mode: forwards;
     color:black;
     display: flex;
+    flex-direction: row;
     justify-content: center;
     font-size: larger;
     font-weight: 600;
-    background-image:url("./assets/lost-image.jpg") ;
+    background-image:url("./assets/lost.jpg") ;
     background-repeat: no-repeat;
+}
+.treasure-cell
+{
+    border:2px solid gold;
+    color:black;
+    font-weight: 500;
+    border-radius: 5px;
+    width:80px;
+    height:20px;
+    background-color:gold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
 }
