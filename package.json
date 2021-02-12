@@ -1,0 +1,23 @@
+{
+  "name": "Treasure-in-the-island",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "jest --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Srimathi-S/Treasure-In-The-Island.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Srimathi-S/Treasure-In-The-Island/issues"
+  },
+  "homepage": "https://github.com/Srimathi-S/Treasure-In-The-Island#readme",
+  "devDependencies": {
+    "jest": "^26.6.3"
+  }
+}

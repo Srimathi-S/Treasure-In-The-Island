@@ -1,19 +1,11 @@
-var totalRows;
-var totalColumns;
-var currentTreasureCoins;
-var totalTreasureCoins;
-var treasureCoinsDiv;
-var islandDiv;
-var treasureRow;
-var treasureColumn;
-
-
 var isGameStarted=false;
 var isGameOver=false;
-
-const gameRules="Choose the island cells and get clues to find Treasure. Coins will be minimized for wrong guess. Look at right to know coins left"
+var currentTreasureCoins;
+var totalTreasureCoins;
+var islandDiv;
+var treasureCoinsDiv;
+const gameRules="Choose the island cells and get clues to find Treasure. Coins will be minimized for wrong guess. Look at right to know coins left";
 const treasureCoinsTabText="Treasure Coins : ";
-const defaultClue="Your clues appear here";
 const firstElement=0;
 const wrongGuessDecrementor=10;
 const lookDownwards="Look Downwards";
@@ -26,7 +18,13 @@ const wonGame="You won";
 
 function createGame()
 {
-    if(!isGameStarted)startGame();
+    if(!isGameStarted)
+    {
+        var numberOfCells=document.getElementById("numberOfCells").value;
+        var totalRows=numberOfCells;
+        var totalColumns=numberOfCells;
+        startGame(totalRows,totalColumns);
+    }
     else gameAlreadyRunning();
 }
 
@@ -39,24 +37,25 @@ function gameAlreadyRunning()
         });
 }
 
-function startGame()
+function startGame(totalRows,totalColumns)
 {
-    var numberOfCells=document.getElementById("numberOfCells").value;
-    totalRows=numberOfCells;
-    totalColumns=numberOfCells;
+    
     let gameDiv=document.createElement("div");
     gameDiv.className="game";
     generateGameRules();
-    generateTreasureCoins();
-    generateTreasureTab();
+    totalTreasureCoins=generateTreasureCoins(totalRows,totalColumns);
+    currentTreasureCoins=totalTreasureCoins;
+    var treasureRow=generateTreasureRow(totalRows);
+    var treasureColumn=generateTreasureColumn(totalColumns);
+    treasureCoinsDiv=generateTreasureTab(totalTreasureCoins);
     gameDiv.appendChild(treasureCoinsDiv);
-    generateIslandTab();
+    islandDiv=generateIslandTab(totalRows,totalColumns,treasureRow,treasureColumn);
     gameDiv.appendChild(islandDiv);
     document.body.appendChild(gameDiv);
     isGameStarted=true;
 }
 
-function generateIslandTab()
+function generateIslandTab(totalRows,totalColumns,treasureRow,treasureColumn)
 {
     islandDiv=document.createElement("div");
     var color="blue";
@@ -67,8 +66,8 @@ function generateIslandTab()
         {
             let islandCellDiv=document.createElement("div");
             islandCellDiv.className=generateIslandCellClassName(color);
-            islandCellDiv.id=generateIdForIslandCell(row,column);
-            islandCellDiv.setAttribute("onclick","playGame(this)");
+            islandCellDiv.id=generateIslandCellId(row,column);
+            islandCellDiv.setAttribute("onclick","playGame(this,"+treasureRow+","+treasureColumn+",)");
             color=changeIslandCellColor(color);
             rowDiv.appendChild(islandCellDiv);
         }
@@ -76,7 +75,7 @@ function generateIslandTab()
        islandDiv.appendChild(rowDiv);
     }
     islandDiv.className="island";
-    
+    return islandDiv;
 }
 
 function  generateGameRules()
@@ -100,65 +99,73 @@ function changeIslandCellColor(color)
     return "blue";
 }
 
-function generateTreasureTab()
+function generateTreasureTab(totalTreasureCoins)
 {
-    treasureCoinsDiv=document.createElement("div");
+    let treasureCoinsDiv=document.createElement("div");
     treasureCoinsDiv.className="treasure-coins";
     treasureCoinsDiv.innerHTML=treasureCoinsTabText+totalTreasureCoins;
+    return treasureCoinsDiv;
 }
 
-function generateTreasureCoins()
+function generateTreasureCoins(totalRows,totalColumns)
 {
-    currentTreasureCoins=totalRows*10;
-    totalTreasureCoins=totalRows*10;
-    treasureRow=Math.floor(Math.random() * totalRows);
-    treasureColumn=Math.floor(Math.random()*totalColumns);
-    console.log(treasureRow+" "+treasureColumn);
+    let totalTreasureCoins=totalRows*10;
+    return totalTreasureCoins;
 }
 
-function generateIdForIslandCell(row,column)
+function generateTreasureRow(totalRows)
+{
+    return Math.floor(Math.random()*totalRows);
+}
+
+function generateTreasureColumn(totalColumns)
+{
+    return Math.floor(Math.random()*totalColumns);
+}
+
+function generateIslandCellId(row,column)
 {
     return "cell-"+row+"-"+column;
 }
 
-function playGame(islandCell)
+function playGame(islandCell,treasureRow,treasureColumn)
 {
     if(!isGameOver)
     {
-        checkForTreasureAndGiveClue(islandCell);
-        canContinueGame();
+        checkForTreasureAndGiveClue(islandCell,treasureRow,treasureColumn);
+        canContinueGame(treasureRow,treasureColumn);
     }
 
 }
 
-function checkForTreasureAndGiveClue(islandCell)
+function checkForTreasureAndGiveClue(islandCell,treasureRow,treasureColumn)
 {
     islandCellId=islandCell.id;
     let splitter=islandCellId.split('-');
     let selectedRow=splitter[1];
     let selectedColumn=splitter[2];
    
-    if(isTreasureNotFound(selectedRow,selectedColumn))
+    if(isTreasureNotFound(selectedRow,selectedColumn,treasureRow,treasureColumn))
     {
-        minimizeTreasureCoins();
-        giveClues(selectedRow,selectedColumn);
+        currentTreasureCoins=minimizeTreasureCoins(currentTreasureCoins);
+        giveClues(selectedRow,selectedColumn,treasureRow,treasureColumn);
         modifyTreasureTab();
     }
     else{
-        treasureFound();
+        treasureFound(treasureRow,treasureColumn);
         terminateGame()
     }
     
 }
 
-function isTreasureNotFound(selectedRow,selectedColumn)
+function isTreasureNotFound(selectedRow,selectedColumn,treasureRow,treasureColumn)
 {
  return (treasureRow!=selectedRow || treasureColumn!=selectedColumn);
 }
 
-function giveClues(selectedRow,selectedColumn)
+function giveClues(selectedRow,selectedColumn,treasureRow,treasureColumn)
 {
-    currentCell=document.getElementById(generateIdForIslandCell(selectedRow,selectedColumn));
+    currentCell=document.getElementById(generateIslandCellId(selectedRow,selectedColumn));
     if(selectedRow<treasureRow)
     {
         currentCell.innerHTML=lookDownwards;
@@ -181,10 +188,11 @@ function giveClues(selectedRow,selectedColumn)
     currentCell.id="null-cell";
 }
 
-function minimizeTreasureCoins()
+function minimizeTreasureCoins(currentTreasureCoins)
 {
     currentTreasureCoins-=wrongGuessDecrementor;
     console.log(currentTreasureCoins);
+    return currentTreasureCoins;
 }
 
 function modifyTreasureTab()
@@ -202,9 +210,9 @@ function hasSafeAmountOfCoins()
     return (currentTreasureCoins> (totalTreasureCoins/2));
 }
 
-function treasureFound()
+function treasureFound(treasureRow,treasureColumn)
 {
-    displayTreasureCell();
+    displayTreasureCell(treasureRow,treasureColumn);
     wonDiv=document.createElement("div");
     wonDiv.className="won-game";
     wonDiv.innerHTML=wonGame+" "+currentTreasureCoins+" coins";
@@ -212,19 +220,19 @@ function treasureFound()
     isGameOver=true;
 }
 
-function displayTreasureCell()
+function displayTreasureCell(treasureRow,treasureColumn)
 {
-    treasureCellId=generateIdForIslandCell(treasureRow,treasureColumn);
+    treasureCellId=generateIslandCellId(treasureRow,treasureColumn);
     treasureCell=document.getElementById(treasureCellId);
     treasureCell.className="treasure-cell";
     treasureCell.innerHTML=currentTreasureCoins;
 }
 
-function canContinueGame()
+function canContinueGame(treasureRow,treasureColumn)
 {
     if(!hasEnoughCoins())
     {
-        treasureNotFound();
+        treasureNotFound(treasureRow,treasureColumn);
         terminateGame();
     }
 }
@@ -234,9 +242,9 @@ function hasEnoughCoins()
     return currentTreasureCoins!=0;
 }
 
-function treasureNotFound()
+function treasureNotFound(treasureRow,treasureColumn)
 {
-    displayTreasureCell();
+    displayTreasureCell(treasureRow,treasureColumn);
     lostDiv=document.createElement("div");
     lostDiv.className="lost-game";
     lostDiv.innerHTML=lostGame;
@@ -250,3 +258,11 @@ function terminateGame()
     islandDiv.setAttribute("style","display:none");
     treasureCoinsDiv.setAttribute("style","display:none");
 }
+
+module.exports.generateTreasureCoins=generateTreasureCoins;
+module.exports.generateTreasureTab=generateTreasureTab;
+module.exports.generateIslandTab=generateIslandTab;
+module.exports.isTreasureNotFound=isTreasureNotFound;
+module.exports.minimizeTreasureCoins=minimizeTreasureCoins;
+console.log(module.exports);
+console.log(module.filename);

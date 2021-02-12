@@ -4,6 +4,32 @@ body
     font-weight: 500;
     font-style: italic;
 }
+@keyframes animate-heading
+{
+    from{background-color: blue;border: 1px solid blue;}
+    to{background-color: brown;border: 1px solid brown;}
+}
+h1
+{
+    padding: 10px;
+    font-size:large;
+    z-index: 10;
+    color:white;
+    font-family: "Lucida Console", "Courier New", monospace;
+    font-style: normal;
+    border: 1px solid blue;
+    margin-left:630px;
+    margin-right: 300px;
+    background-color: blue;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height:fit-content;
+    width:fit-content;
+    animation-name: animate-heading;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+}
 #input
 {
     display:flex;
@@ -101,7 +127,7 @@ button{
     25%  {top: 200px;}
     50%  {top: 500px;}
     75%  {top: 600px;}
-    to   {top: 500px;}
+    to   {top: 450px;}
   
 }
 
@@ -109,7 +135,7 @@ button{
 {
     width: 250px;
     height: 300px;
-    margin-left: 700px;
+    margin-left: 600px;
     position: absolute;
     animation-name: game-over;
     animation-duration: 4s;
@@ -129,7 +155,7 @@ button{
 {
     width: 250px;
     height: 200px;
-    margin-left: 700px;
+    margin-left: 600px;
     position: absolute;
     animation-name: game-over;
     animation-duration: 4s;
