@@ -7,11 +7,12 @@
     <title>Treasure in the island</title>
     <link rel="stylesheet" href="style.css">
     <script src="app.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 <body>
     <div id="input">
-    <input type="number" placeholder="Enter number of rows" name="numberOfCells" id="numberOfCells"  required>
-    <button onclick="createGame()">Generate Island</button>
+            <input type="number" placeholder="Enter number of rows" min="3" max="9"  id="numberOfCells" required />
+            <button onclick="createGame()">Generate Island</button>
     </div>
 </body>
 </html>

@@ -38,8 +38,8 @@ button{
     border:2px solid black;
     color:rgb(226, 209, 209);
     border-radius: 5px;
-    width:80px;
-    height:20px;
+    width:150px;
+    height:40px;
     background-color: blue;
 }
 .island-cell-brown
@@ -47,8 +47,8 @@ button{
     border:2px solid black;
     color:rgb(226, 209, 209);
     border-radius: 5px;
-    width:80px;
-    height:20px;
+    width:150px;
+    height:40px;
     background-color: brown;
 }
 .island-row
@@ -81,32 +81,18 @@ button{
     border-radius: 10px;
     font-weight: 600;
 }
-.clues
-{
-    display:flex;
-    align-items:center;
-    justify-content: center;
-    border: 1px solid green; 
-    height: 50px;
-    font-weight: 600;
-    width:  400px;
-    margin-top: 50px;
-    margin-left: 1100px;
-    background-color:green;
-    color: white;
-    border-radius: 10px;
-}
 #null-cell
 {
+    display: flex;
     align-items: center;
     justify-content: center;
     border:2px solid white;
     color:rgb(226, 209, 209);
     border-radius: 5px;
-    width:80px;
-    height:20px;
+    width:150px;
+    height:40px;
     background-color:white;
-    color: red;
+    color:black;
 }
 
 @keyframes game-over
@@ -166,26 +152,22 @@ button{
     color:black;
     font-weight: 500;
     border-radius: 5px;
-    width:80px;
-    height:20px;
+    width:150px;
+    height:40px;
     background-color:gold;
     display: flex;
     justify-content: center;
     align-items: center;
     
 }
-.game-rules
+.swal
 {
-    padding:6px;
-    margin: 10px;
-    margin-left: 300px;
-    height: 50px;
-    width:800px;
-    border-radius: 10px;
-    background-color: blueviolet;
-    border: 2px solid blueviolet;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 500;
+}
+.swal-button
+{
+    font-size: x-large;
+    width:100px;
+    height:50px;
 }

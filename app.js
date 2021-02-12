@@ -4,23 +4,22 @@ var currentTreasureCoins;
 var totalTreasureCoins;
 var treasureCoinsDiv;
 var islandDiv;
-var cluesDiv;
-var gameRulesDiv;
 var treasureRow;
 var treasureColumn;
+
 
 var isGameStarted=false;
 var isGameOver=false;
 
-const gameRules="Below is where you have to choose the island cells to find treasure.Coins will be minimized for wrong guess.Look at left to know coins left and clues for your way to treasure"
+const gameRules="Choose the island cells and get clues to find Treasure. Coins will be minimized for wrong guess. Look at right to know coins left"
 const treasureCoinsTabText="Treasure Coins : ";
 const defaultClue="Your clues appear here";
 const firstElement=0;
 const wrongGuessDecrementor=10;
-const lookDownwards="Please Look Downwards";
-const lookUpwards="Please Look Upwards";
-const lookLeftwards="Please Look Leftwards";
-const lookRightwards="Please Look Rightwards";
+const lookDownwards="Look Downwards";
+const lookUpwards="Look Upwards";
+const lookLeftwards="Look Leftwards";
+const lookRightwards="Look Rightwards";
 const lostGame="You lost";
 const wonGame="You won";
 
@@ -33,7 +32,11 @@ function createGame()
 
 function gameAlreadyRunning()
 {
-    alert("Please play the current game");
+    swal(
+        {
+            title:"Please play the current game",
+            icon:"warning",
+        });
 }
 
 function startGame()
@@ -43,13 +46,10 @@ function startGame()
     totalColumns=numberOfCells;
     let gameDiv=document.createElement("div");
     gameDiv.className="game";
+    generateGameRules();
     generateTreasureCoins();
     generateTreasureTab();
     gameDiv.appendChild(treasureCoinsDiv);
-    generateCluesTab();
-    gameDiv.appendChild(cluesDiv);
-    generateGameRules();
-    gameDiv.appendChild(gameRulesDiv);
     generateIslandTab();
     gameDiv.appendChild(islandDiv);
     document.body.appendChild(gameDiv);
@@ -67,7 +67,7 @@ function generateIslandTab()
         {
             let islandCellDiv=document.createElement("div");
             islandCellDiv.className=generateIslandCellClassName(color);
-            islandCellDiv.id=generateId(row,column);
+            islandCellDiv.id=generateIdForIslandCell(row,column);
             islandCellDiv.setAttribute("onclick","playGame(this)");
             color=changeIslandCellColor(color);
             rowDiv.appendChild(islandCellDiv);
@@ -81,9 +81,11 @@ function generateIslandTab()
 
 function  generateGameRules()
 {
-    gameRulesDiv=document.createElement("div");
-    gameRulesDiv.className="game-rules";
-    gameRulesDiv.innerHTML=gameRules;
+    swal({
+        title:"Rules",
+        text:gameRules,
+        icon:"info",
+    })
 }
 
 function generateIslandCellClassName(color)
@@ -105,13 +107,6 @@ function generateTreasureTab()
     treasureCoinsDiv.innerHTML=treasureCoinsTabText+totalTreasureCoins;
 }
 
-function generateCluesTab()
-{
-    cluesDiv=document.createElement("div");
-    cluesDiv.className="clues";
-    cluesDiv.innerHTML=defaultClue;
-}
-
 function generateTreasureCoins()
 {
     currentTreasureCoins=totalRows*10;
@@ -121,7 +116,7 @@ function generateTreasureCoins()
     console.log(treasureRow+" "+treasureColumn);
 }
 
-function generateId(row,column)
+function generateIdForIslandCell(row,column)
 {
     return "cell-"+row+"-"+column;
 }
@@ -146,12 +141,12 @@ function checkForTreasureAndGiveClue(islandCell)
     if(isTreasureNotFound(selectedRow,selectedColumn))
     {
         minimizeTreasureCoins();
-        modifyClueTab(selectedRow,selectedColumn);
-        makeSelectedCellNone(selectedRow,selectedColumn);
+        giveClues(selectedRow,selectedColumn);
         modifyTreasureTab();
     }
     else{
         treasureFound();
+        terminateGame()
     }
     
 }
@@ -161,45 +156,35 @@ function isTreasureNotFound(selectedRow,selectedColumn)
  return (treasureRow!=selectedRow || treasureColumn!=selectedColumn);
 }
 
-function modifyClueTab(selectedRow,selectedColumn)
+function giveClues(selectedRow,selectedColumn)
 {
-    clueTab=document.getElementsByClassName("clues")[firstElement];
+    currentCell=document.getElementById(generateIdForIslandCell(selectedRow,selectedColumn));
     if(selectedRow<treasureRow)
     {
-        clueTab.innerHTML=lookDownwards;
+        currentCell.innerHTML=lookDownwards;
     }
     else if(selectedRow>treasureRow)
     {
-        clueTab.innerHTML=lookUpwards;
+        currentCell.innerHTML=lookUpwards;
     }
     else
     {
         if(selectedColumn<treasureColumn)
         {
-            clueTab.innerHTML=lookRightwards;
+            currentCell.innerHTML=lookRightwards;
         }
         else if(selectedColumn>treasureColumn)
         {
-            clueTab.innerHTML=lookLeftwards;
+            currentCell.innerHTML=lookLeftwards;
         }
     }
-    if(!hasSafeAmountOfCoins())
-    {
-        clueTab.setAttribute("style","background-color:red;border: 2px solid red;");
-    }
+    currentCell.id="null-cell";
 }
 
 function minimizeTreasureCoins()
 {
-    
     currentTreasureCoins-=wrongGuessDecrementor;
     console.log(currentTreasureCoins);
-}
-
-function makeSelectedCellNone(selectedRow,selectedColumn)
-{
-    currentCell=document.getElementById(generateId(selectedRow,selectedColumn));
-    currentCell.id="null-cell";
 }
 
 function modifyTreasureTab()
@@ -222,14 +207,14 @@ function treasureFound()
     displayTreasureCell();
     wonDiv=document.createElement("div");
     wonDiv.className="won-game";
-    wonDiv.innerHTML=wonGame;
+    wonDiv.innerHTML=wonGame+" "+currentTreasureCoins+" coins";
     document.body.append(wonDiv);
     isGameOver=true;
 }
 
 function displayTreasureCell()
 {
-    treasureCellId=generateId(treasureRow,treasureColumn);
+    treasureCellId=generateIdForIslandCell(treasureRow,treasureColumn);
     treasureCell=document.getElementById(treasureCellId);
     treasureCell.className="treasure-cell";
     treasureCell.innerHTML=currentTreasureCoins;
@@ -239,6 +224,7 @@ function canContinueGame()
 {
     if(!hasEnoughCoins())
     {
+        treasureNotFound();
         terminateGame();
     }
 }
@@ -248,7 +234,7 @@ function hasEnoughCoins()
     return currentTreasureCoins!=0;
 }
 
-function terminateGame()
+function treasureNotFound()
 {
     displayTreasureCell();
     lostDiv=document.createElement("div");
@@ -257,4 +243,10 @@ function terminateGame()
     console.log("lost");
     document.body.append(lostDiv);
     isGameOver=true;
+}
+
+function terminateGame()
+{
+    islandDiv.setAttribute("style","display:none");
+    treasureCoinsDiv.setAttribute("style","display:none");
 }
