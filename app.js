@@ -148,7 +148,7 @@ function checkForTreasureAndGiveClue(islandCell,treasureRow,treasureColumn)
     if(isTreasureNotFound(selectedRow,selectedColumn,treasureRow,treasureColumn))
     {
         currentTreasureCoins=minimizeTreasureCoins(currentTreasureCoins);
-        giveClues(selectedRow,selectedColumn,treasureRow,treasureColumn);
+        giveCluesOnSelectedCell(selectedRow,selectedColumn,treasureRow,treasureColumn);
         modifyTreasureTab();
     }
     else{
@@ -163,29 +163,34 @@ function isTreasureNotFound(selectedRow,selectedColumn,treasureRow,treasureColum
  return (treasureRow!=selectedRow || treasureColumn!=selectedColumn);
 }
 
-function giveClues(selectedRow,selectedColumn,treasureRow,treasureColumn)
+function giveCluesOnSelectedCell(selectedRow,selectedColumn,treasureRow,treasureColumn)
 {
     currentCell=document.getElementById(generateIslandCellId(selectedRow,selectedColumn));
+    currentCell.innerHTML=generateClues(selectedRow,selectedColumn,treasureRow,treasureColumn);
+    currentCell.id="null-cell";
+}
+
+function generateClues(selectedRow,selectedColumn,treasureRow,treasureColumn)
+{
     if(selectedRow<treasureRow)
     {
-        currentCell.innerHTML=lookDownwards;
+        return lookDownwards;
     }
     else if(selectedRow>treasureRow)
     {
-        currentCell.innerHTML=lookUpwards;
+        return lookUpwards;
     }
     else
     {
         if(selectedColumn<treasureColumn)
         {
-            currentCell.innerHTML=lookRightwards;
+            return lookRightwards;
         }
         else if(selectedColumn>treasureColumn)
         {
-            currentCell.innerHTML=lookLeftwards;
+            return lookLeftwards;
         }
     }
-    currentCell.id="null-cell";
 }
 
 function minimizeTreasureCoins(currentTreasureCoins)
@@ -259,10 +264,11 @@ function terminateGame()
     treasureCoinsDiv.setAttribute("style","display:none");
 }
 
-module.exports.generateTreasureCoins=generateTreasureCoins;
+/*module.exports.generateTreasureCoins=generateTreasureCoins;
 module.exports.generateTreasureTab=generateTreasureTab;
 module.exports.generateIslandTab=generateIslandTab;
 module.exports.isTreasureNotFound=isTreasureNotFound;
 module.exports.minimizeTreasureCoins=minimizeTreasureCoins;
+module.exports.generateClues=generateClues;
 console.log(module.exports);
-console.log(module.filename);
+console.log(module.filename);*/

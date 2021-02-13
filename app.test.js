@@ -43,4 +43,19 @@ test("Checks function that minimizes treasure coins",()=>
     expect(actual).toBe(expected);
 });
 
+test("checks the function that gives directions",()=>
+{
+    let actual=app.generateClues(2,2,2,3);
+    let expected="Look Rightwards";
+    expect(actual).toBe(expected);
+    expected="Look Leftwards";
+    actual=app.generateClues(2,3,2,2);
+    expect(actual).toBe(expected);
+    actual=app.generateClues(2,2,3,2);
+    expected="Look Downwards";
+    expect(actual).toBe(expected);
+    actual=app.generateClues(2,3,1,2);
+    expected="Look Upwards";
+    expect(actual).toBe(expected);
+});
 
